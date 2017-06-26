@@ -18,8 +18,37 @@ package io.pfunc.loader;
 
 /**
  */
-public interface PFunction {
-    Object invoke(Object... arguments);
+public class PFuncParameterInfo {
+    private Class<?> type;
+    private String name;
+    private String description;
 
-    PFuncInfo getMetadata();
+    @Override
+    public String toString() {
+        return "PFuncParameterInfo{" + type + "}";
+    }
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

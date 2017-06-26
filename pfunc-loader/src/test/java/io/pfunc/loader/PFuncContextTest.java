@@ -17,35 +17,62 @@
 package io.pfunc.loader;
 
 import io.pfunc.sample.MyFunc;
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  */
 public class PFuncContextTest {
-    @Ignore
-    public void testContext() throws Exception {
-        PFuncContext context = new PFuncContext();
+    protected PFuncContext context;
+    protected String methodName = "helloWorld";
 
-        PFunction function = context.withName("myFunc");
-        assertThat(function).describedAs("No function found!").isNotNull();
+    public static void assertFunctionHasValidMetadata(PFunction function) {
+        PFuncInfo metadata = function.getMetadata();
+        assertThat(metadata).describedAs("No metadata on function " + function).isNotNull();
+        System.out.println("Function has metadata " + metadata);
 
-        Object result = function.invoke("James");
-        assertThat(result).isEqualTo("Hello James");
+        assertThat(metadata.getName()).isEqualTo("helloWorld");
+        assertThat(metadata.getReturnType()).isNotNull();
+        PFuncParameterInfo[] parameterInfos = metadata.getParameterInfos();
+        assertThat(parameterInfos).isNotEmpty();
+    }
+
+    @Before
+    public void init() throws IOException {
+        context = new PFuncContext(MyFunc.class.getClassLoader());
     }
 
     @Test
-    public void testJar() throws Exception {
-        PFuncJar jar = PFuncJar.create(MyFunc.class.getClassLoader());
+    public void findFunctions() throws Exception {
+        Map<String, PFunction> functionMap = context.getFunctionMap();
+        assertThat(functionMap).describedAs("functionMap").isNotEmpty().containsKey(methodName);
 
-        PFunction function = jar.withName("myFunc");
+        PFunction function = functionMap.get(methodName);
+        assertThat(function).describedAs("No function found!").isNotNull();
+        assertFunctionHasValidMetadata(function);
+    }
+
+    @Test
+    public void testInvokeMethod() throws Exception {
+        PFunction function = context.withName(methodName);
         assertThat(function).describedAs("No function found!").isNotNull();
 
         Object result = function.invoke("James");
         System.out.println("Invoked " + function + " with result: " + result);
         assertThat(result).isEqualTo("Hello James");
     }
+
+    @Test
+    public void validFunctionMetadata() throws Exception {
+        PFunction function = context.withName(methodName);
+        assertThat(function).describedAs("No function found!").isNotNull();
+        assertFunctionHasValidMetadata(function);
+    }
+
 
 }

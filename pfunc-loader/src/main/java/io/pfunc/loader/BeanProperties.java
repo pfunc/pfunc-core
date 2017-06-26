@@ -18,8 +18,10 @@ package io.pfunc.loader;
 
 /**
  */
-public interface PFunction {
-    Object invoke(Object... arguments);
-
-    PFuncInfo getMetadata();
+public class BeanProperties {
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String RETURN_TYPE = "returnType";
+    public static final String PARAMETER_INFOS = "parameterInfos";
+    public static final String TYPE = "type";
 }

@@ -18,8 +18,33 @@ package io.pfunc.loader;
 
 /**
  */
-public interface PFunction {
-    Object invoke(Object... arguments);
+public class PFuncJarFunction implements PFunction {
+    private final PFuncInfo metadata;
+    private final PFuncJar jar;
+    private final PFunction delegate;
 
-    PFuncInfo getMetadata();
+    public PFuncJarFunction(PFuncInfo metadata, PFuncJar jar) {
+        this.metadata = metadata;
+        this.jar = jar;
+        this.delegate = jar.withName(metadata.getName(), metadata);
+    }
+
+    @Override
+    public PFuncInfo getMetadata() {
+        return metadata;
+    }
+
+    public PFuncJar getJar() {
+        return jar;
+    }
+
+    @Override
+    public String toString() {
+        return "PFuncJarFunction{" + metadata.getName() + "() in " + jar + "}";
+    }
+
+    @Override
+    public Object invoke(Object... arguments) {
+        return delegate.invoke(arguments);
+    }
 }

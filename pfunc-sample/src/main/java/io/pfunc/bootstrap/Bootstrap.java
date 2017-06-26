@@ -23,10 +23,16 @@ import io.pfunc.sample.MyFunc;
 public class Bootstrap {
     public static Object invoke(String functionName, Object[] arguments) {
         switch (functionName) {
-            case "myFunc":
+            case "helloWorld":
                 return MyFunc.helloWorld(argument(arguments, 0, String.class));
         }
         throw new IllegalArgumentException("Function does not exist: " + functionName);
+    }
+
+    public static PFuncInfo[] functionMetadata() throws NoSuchMethodException {
+        return new PFuncInfo[]{
+                new PFuncInfo(MyFunc.class.getMethod("helloWorld", String.class))
+        };
     }
 
     private static <T> T argument(Object[] arguments, int index, Class<T> clazz) {

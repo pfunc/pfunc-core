@@ -16,10 +16,8 @@
  */
 package io.pfunc.loader;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -27,12 +25,6 @@ import java.util.Properties;
  * A helper class for working with pfuncs
  */
 public class PFuncJar {
-    public static final String PROPERTIES_FILE_PATH = "META-INF/services/io.pfunc/pfunc.properties";
-    private static final String DEFAULT_BOOTSTRAP_CLASS = "io.pfunc.bootstrap.Bootstrap";
-    private static final String INVOKE_METHOD = "invoke";
-    private static Class<?>[] invokeMethodParameters = {
-            String.class, Object[].class
-    };
     private final ClassLoader classLoader;
     private final Class<?> boostrapClass;
     private final Method bootstrapMethod;
@@ -45,34 +37,15 @@ public class PFuncJar {
         this.properties = properties;
     }
 
-    public static PFuncJar create(ClassLoader classLoader) {
-        Properties properties = new Properties();
-        String className = DEFAULT_BOOTSTRAP_CLASS;
-        URL resource = classLoader.getResource(PROPERTIES_FILE_PATH);
-        if (resource != null) {
-            try {
-                properties.load(resource.openStream());
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Failed to load " + PROPERTIES_FILE_PATH + ". " + e, e);
-            }
-            className = properties.getProperty(PropertiesKeys.BOOSTRAP_CLASS, DEFAULT_BOOTSTRAP_CLASS);
-        }
-        Class<?> clazz;
-        try {
-            clazz = classLoader.loadClass(className);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("ClassLoader does not contain boostrap class " + className + " in " + classLoader);
-        }
-        try {
-            Method method = clazz.getMethod(INVOKE_METHOD, invokeMethodParameters);
-            return new PFuncJar(classLoader, clazz, method, properties);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("Bootstrap class " + clazz.getName() + " does not have a method "
-                    + INVOKE_METHOD + "(" + Arrays.toString(invokeMethodParameters) + ") in " + classLoader);
-        }
+    @Override
+    public String toString() {
+        return "PFuncJar{" +
+                "classLoader=" + classLoader +
+                ", boostrapClass=" + boostrapClass.getName() +
+                '}';
     }
 
-    public PFunction withName(String name) {
+    public PFunction withName(String name, final PFuncInfo metadata) {
         return new PFunction() {
             @Override
             public String toString() {
@@ -95,6 +68,11 @@ public class PFuncJar {
                 } catch (InvocationTargetException e) {
                     throw new IllegalArgumentException("Could not invoke " + bootstrapArguments + " with " + Arrays.asList(bootstrapArguments) + " due to: " + e, e);
                 }
+            }
+
+            @Override
+            public PFuncInfo getMetadata() {
+                return metadata;
             }
         };
     }

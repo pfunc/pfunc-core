@@ -14,12 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.pfunc.loader;
+package io.pfunc.bootstrap;
+
+import java.lang.reflect.Parameter;
 
 /**
  */
-public interface PFunction {
-    Object invoke(Object... arguments);
+public class PFuncParameterInfo {
+    private final String name;
+    private final Class<?> type;
+    private final String description;
 
-    PFuncInfo getMetadata();
+    public PFuncParameterInfo(Parameter parameter) {
+        this.name = parameter.getName();
+        this.type = parameter.getType();
+        // TODO find description via annotation?
+        this.description = "";
+    }
+
+    public Class<?> getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
