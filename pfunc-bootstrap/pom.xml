@@ -25,20 +25,15 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>pfunc-sample</artifactId>
+  <artifactId>pfunc-bootstrap</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>pfunc :: sample</name>
+  <name>pfunc :: bootstrap</name>
 
   <properties>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>io.pfunc</groupId>
-      <artifactId>pfunc-bootstrap</artifactId>
-    </dependency>
-
 
     <!-- testing -->
     <dependency>

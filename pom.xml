@@ -138,10 +138,18 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+
+      <dependency>
+        <groupId>io.pfunc</groupId>
+        <artifactId>pfunc-bootstrap</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <modules>
+    <module>pfunc-bootstrap</module>
     <module>pfunc-sample</module>
     <module>pfunc-loader</module>
   </modules>

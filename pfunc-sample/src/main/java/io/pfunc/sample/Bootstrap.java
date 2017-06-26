@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.pfunc.bootstrap;
+package io.pfunc.sample;
 
-import io.pfunc.sample.MyFunc;
+import io.pfunc.bootstrap.PFuncInfo;
+
+import static io.pfunc.bootstrap.BootstrapHelpers.argument;
 
 /**
  */
@@ -35,17 +37,4 @@ public class Bootstrap {
         };
     }
 
-    private static <T> T argument(Object[] arguments, int index, Class<T> clazz) {
-        if (arguments == null || arguments.length < index) {
-            return null;
-        }
-        Object value = arguments[index];
-        if (value == null) {
-            return null;
-        }
-        if (clazz.isInstance(value)) {
-            return clazz.cast(value);
-        }
-        throw new IllegalArgumentException("Argument " + index + " is not a " + clazz.getName() + " but is " + value.getClass().getName() + " " + value);
-    }
 }
