@@ -14,22 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.pfunc.bootstrap;
+package io.pfunc.resolver;
+
+import io.pfunc.loader.PFuncContext;
+import io.pfunc.loader.PFunction;
+import org.junit.Test;
+
+import java.io.File;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  */
-public class BootstrapHelpers {
-    public static <T> T argument(Object[] arguments, int index, Class<T> clazz) {
-        if (arguments == null || arguments.length < index) {
-            return null;
-        }
-        Object value = arguments[index];
-        if (value == null) {
-            return null;
-        }
-        if (clazz.isInstance(value)) {
-            return clazz.cast(value);
-        }
-        throw new IllegalArgumentException("Argument " + index + " is not a " + clazz.getName() + " but is " + value.getClass().getName() + " " + value);
+public class BootstrapTest {
+    @Test
+    public void testBootstrap() throws Exception {
+        String basedir = System.getProperty("basedir", ".");
+        File testFile = new File(basedir, "target/test-classes/.pfunc.libraries");
+        assertThat(testFile).exists().isFile();
+
+        PFuncContext context = new PFuncContext();
+        Bootstrap.loadLibraries(context, testFile);
+
+        Map<String, PFunction> map = context.getFunctionMap();
+        assertThat(map).isNotEmpty();
+        System.out.println("Loaded functions: " + map.keySet());
     }
+
 }
