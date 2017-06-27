@@ -38,15 +38,31 @@ public class Bootstrap {
 
     protected static PFuncContext context = new PFuncContext();
 
-    public Bootstrap() {
+    static {
+        init();
+    }
+
+    protected static void init() {
         // lets detect a properites file
         File file = new File(".pfunc.libraries");
         if (file.isFile() && file.exists()) {
-            try {
-                loadLibraries(context, file);
-            } catch (Exception e) {
-                LOGGER.log(Level.WARNING, "Failed to load file " + file + " due to " + e, e);
+            loadFile(file);
+        }
+        String property = System.getProperty("io.pfunc.libraries");
+        if (property != null && property.length() > 0) {
+            File propertyFile = new File(property);
+            if (!file.getAbsolutePath().equals(propertyFile.getAbsolutePath())) {
+                loadFile(propertyFile);
             }
+        }
+    }
+
+    private static void loadFile(File file) {
+        try {
+            LOGGER.info("Loading boottrap file " + file);
+            loadLibraries(context, file);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to load file " + file + " due to " + e, e);
         }
     }
 

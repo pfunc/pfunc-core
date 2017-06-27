@@ -159,6 +159,7 @@
     <module>pfunc-sample</module>
     <module>pfunc-loader</module>
     <module>pfunc-resolver</module>
+    <module>pfunc-tests</module>
   </modules>
 
 

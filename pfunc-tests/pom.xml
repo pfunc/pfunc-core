@@ -25,10 +25,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>pfunc-resolver</artifactId>
+  <artifactId>pfunc-tests</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>pfunc :: resolver</name>
+  <name>pfunc :: sample</name>
 
   <properties>
   </properties>
@@ -36,63 +36,10 @@
   <dependencies>
     <dependency>
       <groupId>io.pfunc</groupId>
-      <artifactId>pfunc-bootstrap</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.pfunc</groupId>
       <artifactId>pfunc-loader</artifactId>
+      <scope>test</scope>
     </dependency>
 
-
-    <!-- only required for com/google/common/base/Predicate -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>22.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-aether-provider</artifactId>
-      <version>3.3.9</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>org.eclipse.sisu.plexus</artifactId>
-          <groupId>org.eclipse.sisu</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.aether</groupId>
-      <artifactId>aether-api</artifactId>
-      <version>${aether.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.aether</groupId>
-      <artifactId>aether-connector-basic</artifactId>
-      <version>${aether.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.aether</groupId>
-      <artifactId>aether-impl</artifactId>
-      <version>${aether.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.aether</groupId>
-      <artifactId>aether-spi</artifactId>
-      <version>${aether.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.aether</groupId>
-      <artifactId>aether-transport-http</artifactId>
-      <version>${aether.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>jcl-over-slf4j</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
     <!-- testing -->
     <dependency>
@@ -115,5 +62,19 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
+
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <version>${project.version}</version>
+            <basedir>${basedir}</basedir>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
