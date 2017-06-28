@@ -133,6 +133,17 @@ withPFunkConfig(envVars, systemProperties) {
 }
 ```
 
+## CLI
+
+You can invoke functions from the command line using the `pfunc-resolver` jar. e.g.
+
+```
+$ mvn install
+$ cd pfunc-tests/target/test-classes
+$ java -jar ../../../pfunc-resolver/target/pfunc-resolver-1.0-SNAPSHOT.jar helloWorld cheese
+helloWorld[cheese] => Hello cheese
+```
+
 ## TODO
 
 * can we override System.setProperties() and System.setEnv() as we invoke a pfunk? Would be nice if we can
