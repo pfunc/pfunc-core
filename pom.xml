@@ -295,7 +295,7 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>io.pfunc.PortSwizzler</Main-Class>
+                    <Main-Class>io.pfunc.resolver.Main</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
