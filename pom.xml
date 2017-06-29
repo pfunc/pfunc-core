@@ -151,12 +151,18 @@
         <artifactId>pfunc-loader</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.pfunc</groupId>
+        <artifactId>pfunc-resolver</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <modules>
     <module>pfunc-bootstrap</module>
     <module>pfunc-sample</module>
+    <module>pfunc-helpers</module>
     <module>pfunc-loader</module>
     <module>pfunc-resolver</module>
     <module>pfunc-tests</module>

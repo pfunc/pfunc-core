@@ -1,0 +1,2 @@
+mvn:io.pfunc:pfunc-sample:${project.version}
+mvn:io.pfunc:pfunc-helpers:${project.version}

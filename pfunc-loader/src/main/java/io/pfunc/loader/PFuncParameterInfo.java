@@ -27,7 +27,22 @@ public class PFuncParameterInfo {
     public String toString() {
         return "PFuncParameterInfo{" + type + "}";
     }
-
+    /** 
+     * Returns the method prototype text 
+     */
+    public String getPrototype() {
+        StringBuilder builder = new StringBuilder();
+        if (type != null) {
+            builder.append(type.getName());
+        }
+        if (name != null && name.length() > 0) {
+            if (builder.length() > 0) {
+                builder.append(" ");
+            }
+            builder.append(name);
+        }
+        return builder.toString();
+    }
     public Class<?> getType() {
         return type;
     }

@@ -24,11 +24,13 @@ import io.pfunc.loader.PFunction;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,6 +57,23 @@ public class Bootstrap {
                 loadFile(propertyFile);
             }
         }
+
+        Enumeration<URL> urls; 
+        try {
+            urls = Bootstrap.class.getClassLoader().getResources(".pfunc.libraries");
+         } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to .pfunc.libraries files on the classpath due to " + e, e);
+            return;
+        }
+        while (urls.hasMoreElements()) {
+            URL url = urls.nextElement();
+            try {
+                LOGGER.info("Loading boottrap url " + file);
+                loadLibraries(context, url);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Failed to load  " + url + " due to " + e, e);
+            }
+        }
     }
 
     private static void loadFile(File file) {
@@ -67,9 +86,19 @@ public class Bootstrap {
     }
 
     public static void loadLibraries(PFuncContext context, File file) throws Exception {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            loadLibraries(context, reader);
+        }
+    }
+    public static void loadLibraries(PFuncContext context, URL url) throws Exception {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            loadLibraries(context, reader);
+        }
+    }
+
+    protected static void loadLibraries(PFuncContext context, BufferedReader reader) throws Exception {
         List<String> coordinates = new ArrayList<>();
         List<URL> urls = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while (true) {
                 String line = reader.readLine();
                 if (line == null) {
@@ -89,7 +118,6 @@ public class Bootstrap {
                     }
                 }
             }
-        }
         if (!coordinates.isEmpty()) {
             Resolver resolver = new Resolver();
             urls.addAll(resolver.resolveCoordinates(coordinates));
@@ -101,6 +129,10 @@ public class Bootstrap {
             URLClassLoader classLoader = new URLClassLoader(urlArray, parentClassLoader);
             context.loadFunctions(classLoader);
         }
+    }
+
+    public static PFuncContext getContext() {
+        return context;
     }
 
     public static Object invoke(String functionName, Object[] arguments) {

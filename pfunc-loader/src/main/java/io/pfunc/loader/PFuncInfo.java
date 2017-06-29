@@ -31,6 +31,25 @@ public class PFuncInfo {
         return "PFuncInfo{" + name + Arrays.toString(parameterInfos) + " returnType: " + returnType + "}";
     }
 
+    /** 
+     * Returns the method prototype text 
+     */
+    public String getPrototype() {
+        StringBuilder builder = new StringBuilder(name);
+        builder.append("(");
+        if (parameterInfos != null) {
+            int count = 0;
+            for (PFuncParameterInfo parameterInfo : parameterInfos) {
+                if (count++ > 0) {
+                    builder.append(", ");
+                }
+                builder.append(parameterInfo.getPrototype());
+            }
+        }
+        builder.append(")");
+        return builder.toString();
+    }
+
     public String getName() {
         return name;
     }
